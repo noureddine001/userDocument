@@ -6,9 +6,11 @@ import com.valueit.userdocument.repository.RepoUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
     private RepoUser repoUser ;
@@ -23,27 +25,36 @@ public class UserController {
         return repoUser.findAll();
     }
 
-    @GetMapping(value ="/users1/{id}")
+    @GetMapping(value ="/users/{id}")
     public User getUser(@PathVariable Long id){
         return repoUser.findById(id).orElseThrow(()-> new UserNotFoundException(id)) ;
     }
 
-    @PostMapping(value="/addUser")
+    @PostMapping(value="/user")
     public User addUser(@RequestBody User user){
         return repoUser.save(user) ;
     }
 
-    @DeleteMapping(value="/deleteuser/{id}")
+    @PostMapping(value="/users")
+    public List<User> addUsers(@RequestBody List<User> users){
+        List<User> userList =new ArrayList<>() ;
+        users.forEach(user -> {
+           userList.add( repoUser.save(user)) ;
+        });
+        return userList;
+    }
+
+    @DeleteMapping(value="/users/{id}")
     void deleteUser(@PathVariable Long id) {
         repoUser.deleteById(id);
     }
 
 
-    @PutMapping(value="/updateuser/{id}")
+    @PutMapping(value="/users/{id}")
     public User replaceUser(@RequestBody User newUser, @PathVariable Long id) {
 
         return repoUser.findById(id)
-                .map(user-> {
+                .map(user -> {
                     user.setFirstName(newUser.getFirstName());
                     user.setLastName(newUser.getLastName());
                     return repoUser.save(user);
@@ -53,8 +64,4 @@ public class UserController {
                     return repoUser.save(newUser);
                 });
     }
-
-
-
-
 }

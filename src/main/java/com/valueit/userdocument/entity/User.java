@@ -21,7 +21,7 @@ public class User {
     private String firstName ;
     private String lastName ;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Document> documents ;
 
 }

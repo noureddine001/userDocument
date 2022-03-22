@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RepoDocument extends JpaRepository<Document, Long > {
+
+    public Document findDocumentByDocName(String name) ;
 }

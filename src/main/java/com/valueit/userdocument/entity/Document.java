@@ -1,6 +1,7 @@
 package com.valueit.userdocument.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,10 +19,11 @@ public class Document {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long docId ;
     private String docName ;
-    private String description ;
-    private String LocalURL ;
+    private String uploadURI;
+    private long size ;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "userId")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user ;
 }
